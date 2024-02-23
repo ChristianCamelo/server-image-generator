@@ -75,20 +75,20 @@ exports.messagesGET = function (req) {
  * body Messages_body 
  * returns inline_response_200_3
  **/
-exports.messagesPOST = function (req) {
+exports.messagesPOST = function (req,body) {
   return new Promise(async (resolve, reject) => {
     try {
+      //console.log(body)
       const { status, channel } = await new Promise((resolve, reject) => {
         verificarToken(req.headers.authorization, (status, channel) => {
           resolve({ status, channel });
         });
       });
-      console.log(req)
-      //console.log(status)
+      //console.log(status.status)
       switch (status.status) {
         case 1:
-          const messages = await PostDiscordImagine(body);
-          resolve({ message: messages });
+          //const messages = await PostDiscordImagine(body);
+          resolve({ message: "prompt recibido" });
           break;
         case -1:
           resolve({ message: "usuario no autorizado" });

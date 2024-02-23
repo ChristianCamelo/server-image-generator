@@ -24,7 +24,7 @@ module.exports.messagesGET = function messagesGET (req, res, next) {
 };
 
 module.exports.messagesPOST = function messagesPOST (req, res, next, body) {
-  Default.messagesPOST(body)
+  Default.messagesPOST(req,body)
     .then(function (response) {
       utils.writeJson(res, response);
     })
