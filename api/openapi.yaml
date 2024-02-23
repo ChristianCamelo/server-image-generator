@@ -1,0 +1,184 @@
+openapi: 3.0.0
+info:
+  title: Servidor Node.js con OpenAPI
+  version: 1.0.0
+servers:
+- url: http://localhost:8080
+  variables:
+    defaultHost:
+      default: localhost:8080
+  # Configuración CORS para permitir cualquier origen
+  x-any-server: true
+  # Configuración adicional de CORS si es necesario
+  x-cors-settings:
+    allow-headers: "*"
+    allow-methods: "*"
+    allow-origin: "*"
+paths:
+  /login:
+    post:
+      summary: Iniciar sesión
+      description: Endpoint para iniciar sesión de usuario
+      operationId: loginPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login_body'
+        required: true
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        "201":
+          description: Usuario no existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_201'
+        "202":
+          description: Usuario incorrecto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_202'        
+      x-swagger-router-controller: Default
+  /register:
+    post:
+      summary: Registrar usuario
+      description: Endpoint para registrar un nuevo usuario
+      operationId: registerPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/register_body'
+        required: true
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+      x-swagger-router-controller: Default
+  /messages:
+    get:
+      summary: Obtener mensajes
+      description: Endpoint para obtener mensajes
+      operationId: messagesGET
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+      security:
+      - ApiKeyAuth: []
+      x-swagger-router-controller: Default
+    post:
+      summary: Crear mensaje
+      description: Endpoint para crear un nuevo mensaje
+      operationId: messagesPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/messages_body'
+        required: true
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+      security:
+      - ApiKeyAuth: []
+      x-swagger-router-controller: Default
+components:
+  schemas:
+    register_body:
+      type: object
+      properties:
+        username:
+          type: string
+          example: nuevoUsuario
+        password:
+          type: string
+          example: nuevaContraseña123
+    login_body:
+      type: object
+      properties:
+        username:
+          type: string
+          example: usuario1
+        password:
+          type: string
+          example: contraseña123
+    inline_response_200_1:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Usuario registrado correctamente
+      example:
+        message: Usuario registrado correctamente
+    inline_response_200:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Sesión iniciada correctamente
+      example:
+        message: Sesión iniciada correctamente
+    inline_response_200_2:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Mensajes obtenidos correctamente
+      example:
+        message: Mensajes obtenidos correctamente
+    messages_body:
+      type: object
+      properties:
+        mensaje:
+          type: string
+          example: Este es un nuevo mensaje
+    inline_response_200_3:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Mensaje creado correctamente
+      example:
+        message: Mensaje creado correctamente
+    inline_response_201:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Sesión iniciada correctamente
+    inline_response_202:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Sesión iniciada correctamente         
+    inline_response_203:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Sesión no iniciada correctamente
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: Authorization
+      in: header
+
