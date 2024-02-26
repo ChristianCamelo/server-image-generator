@@ -12,7 +12,7 @@
 
 const checkPwd = require('./Password')
 const register = require('./Register');
-const { GetDiscordChannelMessages, PostDiscordImagine } = require('./Discord');
+const { GetDiscordChannelMessages, PostDiscordImagine, PostInteraction } = require('./Discord');
 const { verificarToken } = require('./Authorization')
 
 exports.loginPOST = function (body) {
@@ -39,6 +39,7 @@ exports.loginPOST = function (body) {
  **/
 
 exports.messagesGET = function (req) {
+  console.log("##################-MESSAGES GET-##################")
   //console.log(req.headers.authorization)
   return new Promise(async (resolve, reject) => {
     try {
@@ -47,7 +48,7 @@ exports.messagesGET = function (req) {
           resolve({ status, channel });
         });
       });
-      //console.log(status)
+      //console.log(req.headers.authorization)
       switch (status.status) {
         case 1:
           const messages = await GetDiscordChannelMessages(status.channel);
@@ -75,20 +76,21 @@ exports.messagesGET = function (req) {
  * body Messages_body 
  * returns inline_response_200_3
  **/
-exports.messagesPOST = function (req) {
+exports.messagesPOST = function (req ,body) {
+  console.log("##################-MESSAGES POST-##################")
   return new Promise(async (resolve, reject) => {
     try {
       const { status, channel } = await new Promise((resolve, reject) => {
-        verificarToken(req.headers.authorization, (status, channel) => {
-          resolve({ status, channel });
+        verificarToken(req.headers.authorization, (status) => {
+          resolve({ status });
+          console.log(status)
         });
       });
-      console.log(req)
-      //console.log(status)
+      console.log("messagesPOST recibe: ", body, " channel: ", status.channel)
       switch (status.status) {
         case 1:
-          const messages = await PostDiscordImagine(body);
-          resolve({ message: messages });
+          const messages = await PostDiscordImagine(body.prompt ,status.channel);
+          resolve({ message: "usuario autorizado" });
           break;
         case -1:
           resolve({ message: "usuario no autorizado" });
@@ -104,6 +106,43 @@ exports.messagesPOST = function (req) {
   });
 }
 
+
+/**
+ * Crear accion
+ * Endpoint para crear un nuevo accion
+ *
+ * body Messages_body 
+ * returns inline_response_200_3
+ **/
+exports.actionPOST = function (req, body) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { status, channel } = await new Promise((resolve, reject) => {
+        verificarToken(req.headers.authorization, (status, channel) => {
+          resolve({ status, channel });
+        });
+      });
+      console.log(req)
+      //console.log(status)
+      switch (status.status) {
+        case 1:
+          console.log(body)
+          //const messages = await PostInteraction(body);
+          resolve({ message: "recibida accion" });
+          break;
+        case -1:
+          resolve({ message: "usuario no autorizado" });
+          break;
+        default:
+          resolve({ message: "estado de token desconocido" });
+          break;
+      }
+    } catch (error) {
+      console.error('Error al verificar el token:', error);
+      reject({ status: -1, user: null });
+    }
+  });
+}
 
 /**
  * Registrar usuario

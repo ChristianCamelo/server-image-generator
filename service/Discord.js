@@ -39,7 +39,7 @@ async function GetDiscordChannelMessages(channel) {
 			`${discordAPI}/channels/${channel}/messages`,
 			{ headers: DiscordHeaders(discord) }
 		);
-        console.log('GetDiscordChannelMessages : Devolviendo mensajes ',response.data)
+        console.log('GetDiscordChannelMessages : Devolviendo mensajes ',response.data.length)
 		return response.data;
 	} catch (error) {
 		console.error('GetDiscordChannelMessages: Error al obtener mensajes del canal:', error);
@@ -125,8 +125,8 @@ async function CheckResults(channel) {
 		return (data);
 	}
 }
-
-async function GetInteraction(option, image,channel) {
+// Le entrego el id del mensaje, el hash, la opcion que quiero por default 2, la imagen numero 1...4 y el canal
+async function PostInteraction(messageId, customId, option, image, channel) {
 	try {
 		const nonce = await getNonce();
 		const session_id = await getSession();
@@ -134,6 +134,7 @@ async function GetInteraction(option, image,channel) {
 		// OPCION 1 VARIAR, OPCION 2 ESCALAR
 		const variationSetup = "MJ::JOB::variation::";
 		const upsampleSetup = "MJ::JOB::upsample::";
+
 		var picked = "";
 
 		if (option === 1) {
@@ -184,7 +185,7 @@ function splitHash(hashStr) {
 module.exports = {
     splitHash, 
     GetDiscordChannelMessages, 
-    GetInteraction, 
+    PostInteraction, 
     CheckResults,
     PostDiscordImagine
 }

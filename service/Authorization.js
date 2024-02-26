@@ -8,6 +8,7 @@ function verificarToken(token, callback) {
         callback({ status: -2, user: null });
         return;
     }
+    //console.log("verificarToken: ",token)
     jwt.verify(token, secret, function (err, decoded) {
         if (err) {
             callback({ status: -1, user: null , channel:null});
@@ -32,7 +33,7 @@ function findChannelByUsername(username, callback) {
         const database = JSON.parse(data);
         const cliente = database.find(u => u.username === username);
         if (cliente) {
-            //console.log("Usuario es: ",cliente)
+            console.log("Usuario es: ",cliente)
             const channel = cliente.channel;
             callback(channel);
         } else {
