@@ -100,6 +100,27 @@ paths:
       security:
       - ApiKeyAuth: []
       x-swagger-router-controller: Default
+  /action:
+    post:
+      summary: Crear mensaje
+      description: Endpoint para crear un nuevo mensaje
+      operationId: actionPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/messages_body'
+        required: true
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+      security:
+      - ApiKeyAuth: []
+      x-swagger-router-controller: Default
 components:
   schemas:
     register_body:
@@ -179,6 +200,6 @@ components:
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
-      name: Authorization
+      name: authorization
       in: header
 

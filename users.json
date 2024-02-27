@@ -3,18 +3,21 @@
     "ID": 1,
     "username": "usuarioA",
     "password": "$2b$10$WValccndPVSz1UYaPQXOhe/V/H2RyNAf5.bUeJM8rOEfmBkYsgxyK",
-    "channel":"1210242141574668288"
+    "channel":"1210242180359393290",
+    "colors":"aqua colors, ash gray, cyan colors, silver colors, metal materials"
   },
   {
     "ID": 2,
     "username": "usuarioB",
     "password": "$2b$10$85nQ.P.eSrSkmMIalz4Ip.BShIVM2bJPhmN7UAcYbtjLpdGICwACK",
-    "channel":"1210242180359393290"
+    "channel":"1210242180359393290",
+    "colors":"aqua colors, ash gray, cyan colors, silver colors, metal materials"
   },
   {
     "ID": 3,
     "username": "usuarioC",
     "password": "$2b$10$DX/9Y2.dFyTKmB.CF4bAOuGAOSZc3IK01lkTpha3z83xT8zninFia",
-    "channel":"1210242202488406088"
+    "channel":"1210242180359393290",
+    "colors":"aqua colors, ash gray, cyan colors, silver colors, metal materials"
   }
 ]

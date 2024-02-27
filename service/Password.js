@@ -28,7 +28,7 @@ function checkPwd(user, password, callback) {
             return;
         }
         if (match) {
-            const token = jwt.sign({ username: username }, secret, { expiresIn: '1h' });
+            const token = jwt.sign({ username: username }, secret, { expiresIn: '24h' });
             callback(2, token);
             return;
         } else {

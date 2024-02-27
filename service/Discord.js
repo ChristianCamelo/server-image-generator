@@ -7,7 +7,6 @@ const MidjourneyVersion = `1166847114203123795`;
 const discord = `MTEzMDc0MzQ4OTU3MTg2ODc1NA.GqeO59.wJYkjErhNyhtshTGNvf6MR0-uFYy1xAcP4Z02M`;
 const server = `1204813483431034911`; // IGUAL
 
-const postpromt = " aqua colors, ash gray, cyan colors, silver colors, metal materials, marketing ad";
 const promptparams = "realistic image, by canon 5 R.High resolution. Photorealistic lighting, 8K. Super Resolution, Megapixel, Pro Photo | 8k 35mm, 8k, depth of field --iw 0.5 --v 6.0 --ar 16:9"
 
 var messageId = ""
@@ -39,66 +38,67 @@ async function GetDiscordChannelMessages(channel) {
 			`${discordAPI}/channels/${channel}/messages`,
 			{ headers: DiscordHeaders(discord) }
 		);
-        console.log('GetDiscordChannelMessages : Devolviendo mensajes ',response.data)
+        console.log('GetDiscordChannelMessages : Devolviendo mensajes ',response.data.length)
 		return response.data;
 	} catch (error) {
 		console.error('GetDiscordChannelMessages: Error al obtener mensajes del canal:', error);
 		throw error;
 	}
 }
+async function PostDiscordImagine(prompt, channel) {
+    try {
+		console.log("PostDiscordImagine: pidiendo prompt ", prompt," canal",channel)
+        const nonce = await getNonce();
+        const session_id = await getSession();
 
-async function PostDiscordImagine(prompt,channel) {
-	try {
-		const nonce = await getNonce();
-		const session_id = await getSession();
+        const response = await axios.post(
+            `${discordAPI}/interactions`,
+            {
+                "type": 2,
+                "application_id": MidjourneyAppId,
+                "guild_id": server,
+                "channel_id": channel,
+                "session_id": session_id,
+                "data": {
+                    "version": MidjourneyVersion,
+                    "id": "938956540159881230",
+                    "name": "imagine",
+                    "type": 1,
+                    "options": [
+                        {
+                            "type": 3,
+                            "name": "prompt",
+                            "value": prompt
+                        }
+                    ],
+                    "application_command": {
+                        "id": "938956540159881230",
+                        "type": 1,
+                        "application_id": "936929561302675456",
+                        "version": MidjourneyVersion,
+                        "name": "imagine"
+                    },
+                    "attachments": []
+                },
+                "nonce": nonce,
+                "analytics_location": "slash_ui"
+            },
+            { headers: DiscordHeaders(discord) }
+        );
 
-		const response = await axios.post(
-			`${discordAPI}/interactions`,
-			{
-				"type": 2,
-				"application_id": MidjourneyAppId,
-				"guild_id": server,
-				"channel_id": channel,
-				"session_id": session_id,
-				"data": {
-					"version": MidjourneyVersion,
-					"id": "938956540159881230",
-					"name": "imagine",
-					"type": 1,
-					"options": [
-						{
-							"type": 3,
-							"name": "prompt",
-							"value": prompt
-						}
-					],
-					"application_command": {
-						"id": "938956540159881230",
-						"type": 1,
-						"application_id": "936929561302675456",
-						"version": MidjourneyVersion,
-						"name": "imagine"
-					},
-					"attachments": []
-				},
-				"nonce": nonce,
-				"analytics_location": "slash_ui"
-			},
-			{ headers: DiscordHeaders(discord) }
-		);
-
-		if (response.status === 204) {
-			console.log('PostDiscordImagine: La solicitud fue exitosa pero no hay contenido.');
-			return;
-		} else if (!response.ok) {
-			throw new Error('PostDiscordImagine: PostDiscordImagineLa solicitud no fue exitosa: ' + response.statusText);
-		}
-		return response;
-	} catch (error) {
-		console.error('PostDiscordImagine: Error en la solicitud de Discord:', error);
-		throw error;
-	}
+        if (response.status === 204) {
+            console.log('PostDiscordImagine: La solicitud fue exitosa pero no hay contenido.');
+            return;
+        } else {
+            console.error('PostDiscordImagine: La solicitud no fue exitosa:', response.statusText);
+            throw new Error('PostDiscordImagine: La solicitud no fue exitosa: ' + response.statusText);
+        }
+    } catch (error) {
+        console.error('PostDiscordImagine: Error en la solicitud de Discord:', error);
+        throw error;
+    }
 }
+
 
 async function CheckResults(channel) {
 	var result = await GetDiscordChannelMessages();
@@ -125,8 +125,8 @@ async function CheckResults(channel) {
 		return (data);
 	}
 }
-
-async function GetInteraction(option, image,channel) {
+// Le entrego el id del mensaje, el hash, la opcion que quiero por default 2, la imagen numero 1...4 y el canal
+async function PostInteraction(messageId, customId, option, image, channel) {
 	try {
 		const nonce = await getNonce();
 		const session_id = await getSession();
@@ -134,6 +134,7 @@ async function GetInteraction(option, image,channel) {
 		// OPCION 1 VARIAR, OPCION 2 ESCALAR
 		const variationSetup = "MJ::JOB::variation::";
 		const upsampleSetup = "MJ::JOB::upsample::";
+
 		var picked = "";
 
 		if (option === 1) {
@@ -184,7 +185,7 @@ function splitHash(hashStr) {
 module.exports = {
     splitHash, 
     GetDiscordChannelMessages, 
-    GetInteraction, 
+    PostInteraction, 
     CheckResults,
     PostDiscordImagine
 }
