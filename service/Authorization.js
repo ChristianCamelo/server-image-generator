@@ -3,35 +3,41 @@ const fs = require('fs');
 
 const secret = "kjbfirebvirbvuirb89gt541h65thkrj%&533c34&$";
 
-function verificarToken(token, callback) {
-    if (!token) {
-        callback({ status: -2, user: null });
-        return;
-    }
-    //console.log("verificarToken: ",token)
-    jwt.verify(token, secret, function (err, decoded) {
-        if (err) {
-            callback({ status: -1, user: null, channel: null });
-            return;
+function verificarToken(token) {
+    return new Promise((resolve, reject) => {
+        if (!token) {
+            resolve({ status: -2, user: null });
+        } else {
+            jwt.verify(token, secret, function (err, decoded) {
+                if (err) {
+                    resolve({ status: -1, user: null });
+                } else {
+                    findChannelByUsername(decoded.username, function (channel) {
+                        if (decoded.username === "admin") {
+                            resolve({ status: 3, user: decoded, channel: channel });
+                        } else {
+                            console.log("REGULAR USER")
+                            resolve({ status: 1, user: decoded, channel: channel });
+                        }
+                    });
+                }
+            });
         }
-        // Verificación exitosa, devuelve el usuario decodificado
-        const channel = findChannelByUsername(decoded.username, function (channel) {
-            callback({ status: 1, user: decoded, channel: channel });
-            return;
-        });
     });
 }
 
 async function getStyle(id) {
     try {
-        console.log("buildPrompt: buscando estilo ", id);
+        //console.log("buildPrompt: buscando estilo ", typeof(id));
         const data = await fs.promises.readFile('styles.json', 'utf8');
         const database = JSON.parse(data);
-        console.log(data)
-        const style = database.find(s => s.ID === id);
+        //console.log(data)
+        //console.log("buildPrompt: buscando estilo ",  typeof(database[0]["ID"].toString()));
+
+        const style = database.find(s => s.ID.toString() === id);
         if (style) {
-            console.log("getStyle: ",style.settings)
-            return s.settings;
+            //console.log("getStyle: ",style.settings)
+            return style.settings;
         }
         else {
             console.log("Error: Estilo no encontrado")
@@ -46,7 +52,7 @@ async function getStyle(id) {
 // QUEDE AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII <------------------------------------
 
 async function buildPrompt(username, body) {
-    console.log("buildPrompt: buscando a ", username);
+    //console.log("buildPrompt: buscando a ", username);
     try {
         const data = await fs.promises.readFile('users.json', 'utf8');
         const database = JSON.parse(data);
@@ -90,7 +96,7 @@ function findChannelByUsername(username, callback) {
         const database = JSON.parse(data);
         const cliente = database.find(u => u.username === username);
         if (cliente) {
-            console.log("Usuario es: ", cliente)
+            //console.log("Usuario es: ", cliente)
             const channel = cliente.channel;
             callback(channel);
         } else {

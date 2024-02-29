@@ -44,7 +44,7 @@ module.exports.actionPOST = function actionPOST (req, res, next, body) {
 };
 
 module.exports.registerPOST = function registerPOST (req, res, next, body) {
-  Default.registerPOST(body)
+  Default.registerPOST(req, body)
     .then(function (response) {
       utils.writeJson(res, response);
     })
