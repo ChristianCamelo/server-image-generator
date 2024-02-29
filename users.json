@@ -13,5 +13,45 @@
     "colors": "red, cyan colors, lemon yellow",
     "channel": "1204717397521465394",
     "materials": "metals, industrial, ecology, magnificent"
+  },
+  {
+    "ID": 2,
+    "username": "ddfdfdf",
+    "password": "$2b$10$K6Yk.B.up3MJhFqnprI00.bR1.QfPOHfXSjcTh4VXKbbv.eVArBc.",
+    "colors": "ecru color, smoky black, blood red, golden yellow, electric purple, neon pink, chinese violet, dark purple",
+    "channel": "12223344455",
+    "materials": "ceramicas"
+  },
+  {
+    "ID": 3,
+    "username": "litio",
+    "password": "$2b$10$wtATjbhwHw06.UKjY054ZOzPxSgnLSvJgShs/LVBFMzyDVVXZ3UpW",
+    "colors": "gainsboro, black",
+    "channel": "123",
+    "materials": "1234asf"
+  },
+  {
+    "ID": 4,
+    "username": "usuarioA12",
+    "password": "$2b$10$OlUCZNneyo4kJd9ENM96uOskn8aFa.Sd.0f/S2wmBSkzaKhGXMhDq",
+    "colors": "",
+    "channel": "1233",
+    "materials": "1"
+  },
+  {
+    "ID": 5,
+    "username": "usuarioA1",
+    "password": "$2b$10$8fUPsCx15vuYTyoP3LBiNO9eakUwRMQAhXLNrVzmOjnemwgW4P1/W",
+    "colors": "burnt amber, cerulean blue color",
+    "channel": "12334",
+    "materials": "123"
+  },
+  {
+    "ID": 6,
+    "username": "1",
+    "password": "$2b$10$na61Mi3QECbBEzqLDjGGteLDRjUJ0tPU3Plgauf19SvZy91UOxjNK",
+    "colors": "orange",
+    "channel": "123456",
+    "materials": "123"
   }
 ]

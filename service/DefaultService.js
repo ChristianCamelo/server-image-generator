@@ -333,6 +333,9 @@ exports.registerPOST = function (req, body) {
           case 2:
             resolve({ status: 201, message: "USER_CREATED" });
             break;
+          case 3:
+              resolve({ status: 420, message: "CHANNEL_ALREADY_USED" });
+              break;
           default:
             resolve({ status: 500, message: "UNKNOWN_TOKEN_ERROR" });
             break;

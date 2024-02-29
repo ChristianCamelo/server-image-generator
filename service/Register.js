@@ -52,7 +52,7 @@ function register(data, callback) {
                         callback(2);
                     });
                 });
-            }
+            }else { callback(3) }
 
         });
     } else { callback(1) }

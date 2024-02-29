@@ -94,7 +94,7 @@ async function PostDiscordImagine(prompt, channel) {
             throw new Error('PostDiscordImagine: La solicitud no fue exitosa: ' + response.statusText);
         }
     } catch (error) {
-        console.error('PostDiscordImagine: Error en la solicitud de Discord:', error);
+        console.error('PostDiscordImagine: Error en la solicitud de Discord');
         throw error;
     }
 }

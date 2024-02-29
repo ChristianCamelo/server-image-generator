@@ -65,7 +65,7 @@ async function buildPrompt(username, body) {
             const tags = body.tags.split('$$');
             prompt += tags.join(" ");
             const style = await getStyle(body.style);
-            prompt += style + " ";
+            prompt += " " + style + " ";
             const creative = "--stylize " + (750 * Number(body.creative)).toString() + " ";
             prompt += creative;
             const quality = "--quality " + body.quality + " ";
